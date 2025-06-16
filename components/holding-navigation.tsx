@@ -10,20 +10,18 @@ import {
   Pill,
   Syringe,
   HeartPulse,
+  MapPin,
   Phone,
   Mail,
-  MapPin,
-  ChevronDown,
-  Linkedin,
-  Instagram,
+  Globe,
+  Award,
+  Target,
+  Lightbulb,
   VolumeX,
   Volume2,
-  ArrowDown,
+  Play,
 } from "lucide-react"
-import LottiePlayer from "./lottie-player"
 import ScrollIndicator from "./scroll-indicator"
-import CompanyCard from "./company-card"
-import ParallaxSection from "./parallax-section"
 
 interface AnimatedGradientBackgroundProps {
   className?: string
@@ -51,16 +49,11 @@ interface CompanyLink {
   gradientFrom: string
   gradientTo: string
   image: string
+  website: string
   details: {
     title: string
     content: string
   }[]
-}
-
-interface Section {
-  id: string
-  title: string
-  subtitle?: string
 }
 
 function createBeam(width: number, height: number): Beam {
@@ -73,7 +66,7 @@ function createBeam(width: number, height: number): Beam {
     angle: angle,
     speed: 0.3 + Math.random() * 0.5,
     opacity: 0.05 + Math.random() * 0.1,
-    hue: 0, // Gümüş/gri tonları için 0 saturation
+    hue: 0,
     pulse: Math.random() * Math.PI * 2,
     pulseSpeed: 0.01 + Math.random() * 0.02,
   }
@@ -84,138 +77,101 @@ export default function HoldingNavigation({ className, intensity = "subtle" }: A
   const beamsRef = useRef<Beam[]>([])
   const animationFrameRef = useRef<number>(0)
   const MINIMUM_BEAMS = 15
-  const [activeSection, setActiveSection] = useState<string>("hero")
   const [scrollY, setScrollY] = useState(0)
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [isMuted, setIsMuted] = useState(true)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-
-  // Sayfa bölümleri
-  const sections: Section[] = [
-    { id: "hero", title: "Ana Sayfa" },
-    { id: "companies", title: "Şirketlerimiz", subtitle: "Grup Şirketlerimiz" },
-    { id: "about", title: "Hakkımızda", subtitle: "Biz Kimiz?" },
-    { id: "contact", title: "İletişim", subtitle: "Bize Ulaşın" },
-  ]
+  const [isMuted, setIsMuted] = useState(true)
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+  const [showPlayButton, setShowPlayButton] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   // Şirketler
   const companies: CompanyLink[] = [
     {
       name: "Tuna Medikal",
-      description: "Sağlık sektörüne yenilikçi medikal çözümler sunuyoruz.",
-      icon: <Stethoscope className="h-10 w-10" />,
-      color: "text-gray-700",
-      gradientFrom: "from-gray-300",
-      gradientTo: "to-gray-100",
-      image: "/images/cityscape.jpeg",
-      details: [
-        {
-          title: "Hakkımızda",
-          content:
-            "Tuna Medikal, 2005 yılında kurulmuş olup, hastaneler ve sağlık kuruluşları için yüksek kaliteli medikal ekipman ve çözümler sunmaktadır. Geniş ürün yelpazemiz ve uzman kadromuzla sağlık sektörünün güvenilir tedarikçisiyiz.",
-        },
-        {
-          title: "Ürünlerimiz",
-          content:
-            "Tanı ve tedavi ekipmanları, ameliyathane sistemleri, hasta takip cihazları, görüntüleme sistemleri ve hastane mobilyaları gibi geniş bir ürün yelpazesi sunuyoruz.",
-        },
-        {
-          title: "Hizmetlerimiz",
-          content:
-            "Satış öncesi danışmanlık, kurulum, eğitim, teknik servis ve bakım hizmetleri ile müşterilerimize tam destek sağlıyoruz.",
-        },
-      ],
+      description:
+        "Tıbbi cihaz üretimi ve satışı yapıyoruz. Modern teknoloji ile donatılmış üretim tesislerimizde, hastaneler ve sağlık kuruluşları için yüksek kaliteli tıbbi cihazlar üretiyoruz.",
+      icon: <Stethoscope className="h-8 w-8" />,
+      color: "text-white",
+      gradientFrom: "from-blue-500",
+      gradientTo: "to-blue-500",
+      image: "",
+      website: "https://tunamedikal.com",
+      details: [],
     },
     {
       name: "Efe Sentetik",
-      description: "Yenilikçi sentetik malzemeler ve çözümler üretiyoruz.",
-      icon: <Pill className="h-10 w-10" />,
-      color: "text-gray-700",
-      gradientFrom: "from-gray-300",
-      gradientTo: "to-gray-100",
-      image: "/images/skyscrapers.jpeg",
-      details: [
-        {
-          title: "Hakkımızda",
-          content:
-            "Efe Sentetik, 2010 yılında kurulmuş olup, tekstil, otomotiv ve sağlık sektörleri için yüksek performanslı sentetik malzemeler üretmektedir. İnovatif yaklaşımımız ve kalite odaklı üretim anlayışımızla sektörde öncü konumdayız.",
-        },
-        {
-          title: "Ürünlerimiz",
-          content:
-            "Teknik tekstiller, kompozit malzemeler, sentetik elyaflar, medikal tekstiller ve özel uygulamalar için geliştirilmiş sentetik çözümler üretiyoruz.",
-        },
-        {
-          title: "Ar-Ge Çalışmalarımız",
-          content:
-            "Sürekli gelişen teknolojik altyapımız ve deneyimli Ar-Ge ekibimizle, müşterilerimizin ihtiyaçlarına özel çözümler geliştiriyoruz.",
-        },
-      ],
+      description:
+        "Çuval üretimi yapıyoruz. Endüstriyel ve ticari sektörlerin ihtiyaçlarına uygun, yüksek kaliteli polipropilen çuval üretimi gerçekleştiriyoruz.",
+      icon: <Pill className="h-8 w-8" />,
+      color: "text-white",
+      gradientFrom: "from-green-500",
+      gradientTo: "to-green-500",
+      image: "",
+      website: "https://efesentetik.com",
+      details: [],
     },
     {
       name: "Efe Tıp",
-      description: "Sağlık sektörüne yönelik tıbbi cihaz ve ekipmanlar.",
-      icon: <Syringe className="h-10 w-10" />,
-      color: "text-gray-700",
-      gradientFrom: "from-gray-300",
-      gradientTo: "to-gray-100",
-      image: "/images/curved-building.jpeg",
-      details: [
-        {
-          title: "Hakkımızda",
-          content:
-            "Efe Tıp, 2008 yılında kurulmuş olup, tıbbi cihaz ve ekipman üretimi ve dağıtımı alanında faaliyet göstermektedir. Yüksek kalite standartlarımız ve geniş ürün yelpazemizle sağlık sektörünün güvenilir çözüm ortağıyız.",
-        },
-        {
-          title: "Ürünlerimiz",
-          content:
-            "Cerrahi aletler, tanı cihazları, laboratuvar ekipmanları, sterilizasyon sistemleri ve tek kullanımlık tıbbi malzemeler üretiyoruz.",
-        },
-        {
-          title: "Kalite Politikamız",
-          content:
-            "ISO 13485 ve CE sertifikalarına sahip üretim tesislerimizde, uluslararası standartlara uygun ürünler geliştiriyoruz.",
-        },
-      ],
+      description:
+        "Laboratuvar malzemeleri satışı yapıyoruz. Modern laboratuvarların ihtiyaç duyduğu yüksek kaliteli malzeme ve ekipmanları tedarik ediyoruz.",
+      icon: <Syringe className="h-8 w-8" />,
+      color: "text-white",
+      gradientFrom: "from-red-500",
+      gradientTo: "to-red-500",
+      image: "",
+      website: "https://efetip.com",
+      details: [],
     },
     {
       name: "Wellmed",
-      description: "Sağlıklı yaşam için yenilikçi ürün ve hizmetler.",
-      icon: <HeartPulse className="h-10 w-10" />,
-      color: "text-gray-700",
-      gradientFrom: "from-gray-300",
-      gradientTo: "to-gray-100",
-      image: "/images/foggy-mountains.jpeg",
-      details: [
-        {
-          title: "Hakkımızda",
-          content:
-            "Wellmed, 2015 yılında kurulmuş olup, sağlıklı yaşam ve kişisel sağlık yönetimi alanında yenilikçi ürün ve hizmetler sunmaktadır. Misyonumuz, insanların daha sağlıklı ve kaliteli bir yaşam sürmelerine yardımcı olmaktır.",
-        },
-        {
-          title: "Ürünlerimiz",
-          content:
-            "Kişisel sağlık takip cihazları, fitness ekipmanları, beslenme takviyeleri ve sağlıklı yaşam ürünleri sunuyoruz.",
-        },
-        {
-          title: "Hizmetlerimiz",
-          content:
-            "Sağlık danışmanlığı, beslenme programları, fitness koçluğu ve kişiselleştirilmiş sağlık yönetimi hizmetleri veriyoruz.",
-        },
-      ],
+      description:
+        "Medikal malzemeler satışı yapıyoruz. Sağlık kuruluşlarının ihtiyaç duyduğu medikal malzeme ve ekipmanları tedarik ediyoruz.",
+      icon: <HeartPulse className="h-8 w-8" />,
+      color: "text-white",
+      gradientFrom: "from-purple-500",
+      gradientTo: "to-purple-500",
+      image: "",
+      website: "https://wellmed.com",
+      details: [],
     },
-  ]
-
-  // Sosyal medya linkleri (Twitter ve YouTube kaldırıldı)
-  const socialLinks = [
-    { icon: <Linkedin className="h-5 w-5" />, url: "https://linkedin.com/company/tunagroup" },
-    { icon: <Instagram className="h-5 w-5" />, url: "https://instagram.com/tunagroup" },
   ]
 
   const opacityMap = {
     subtle: 0.4,
     medium: 0.6,
     strong: 0.8,
+  }
+
+  // Video oynatma fonksiyonu
+  const playVideo = async () => {
+    const video = videoRef.current
+    if (!video) return
+
+    try {
+      video.currentTime = 10 // 10. saniyeden başlat
+      await video.play()
+      setIsVideoPlaying(true)
+      setShowPlayButton(false)
+    } catch (error) {
+      console.warn("Video otomatik oynatılamadı:", error)
+      setShowPlayButton(true)
+      setIsVideoPlaying(false)
+    }
+  }
+
+  // Manuel video başlatma
+  const handlePlayClick = async () => {
+    const video = videoRef.current
+    if (!video) return
+
+    try {
+      video.currentTime = 10
+      await video.play()
+      setIsVideoPlaying(true)
+      setShowPlayButton(false)
+    } catch (error) {
+      console.error("Video oynatma hatası:", error)
+    }
   }
 
   // Video kontrolü
@@ -225,44 +181,55 @@ export default function HoldingNavigation({ className, intensity = "subtle" }: A
 
     video.muted = isMuted
 
-    // Video yüklendiğinde otomatik oynat
     const handleLoadedData = () => {
-      video.play().catch((error) => {
-        console.error("Video oynatma hatası:", error)
-      })
+      // Otomatik oynatmayı dene
+      playVideo()
+    }
+
+    const handleCanPlay = () => {
+      if (!isVideoPlaying) {
+        playVideo()
+      }
+    }
+
+    const handlePlay = () => {
+      setIsVideoPlaying(true)
+      setShowPlayButton(false)
+    }
+
+    const handlePause = () => {
+      setIsVideoPlaying(false)
+    }
+
+    const handleError = () => {
+      setShowPlayButton(true)
+      setIsVideoPlaying(false)
     }
 
     video.addEventListener("loadeddata", handleLoadedData)
+    video.addEventListener("canplay", handleCanPlay)
+    video.addEventListener("play", handlePlay)
+    video.addEventListener("pause", handlePause)
+    video.addEventListener("error", handleError)
 
     return () => {
       video.removeEventListener("loadeddata", handleLoadedData)
+      video.removeEventListener("canplay", handleCanPlay)
+      video.removeEventListener("play", handlePlay)
+      video.removeEventListener("pause", handlePause)
+      video.removeEventListener("error", handleError)
     }
-  }, [isMuted])
+  }, [isMuted, isVideoPlaying])
 
   // Scroll olayını dinle
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY)
-
-      // Hangi bölümün görünür olduğunu belirle
-      const sectionElements = sections.map((section) => ({
-        id: section.id,
-        element: document.getElementById(section.id),
-      }))
-
-      for (const section of sectionElements) {
-        if (!section.element) continue
-        const rect = section.element.getBoundingClientRect()
-        if (rect.top <= 100 && rect.bottom >= 100) {
-          setActiveSection(section.id)
-          break
-        }
-      }
     }
 
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [sections])
+  }, [])
 
   // Arka plan animasyonu
   useEffect(() => {
@@ -292,9 +259,9 @@ export default function HoldingNavigation({ className, intensity = "subtle" }: A
       ctx.rotate((beam.angle * Math.PI) / 180)
       const pulsingOpacity = beam.opacity * (0.7 + Math.sin(beam.pulse) * 0.3) * opacityMap[intensity]
       const gradient = ctx.createLinearGradient(0, 0, 0, beam.length)
-      gradient.addColorStop(0, `hsla(${beam.hue}, 0%, 70%, 0)`) // Gümüş/gri tonları
-      gradient.addColorStop(0.5, `hsla(${beam.hue}, 0%, 70%, ${pulsingOpacity})`) // Gümüş/gri tonları
-      gradient.addColorStop(1, `hsla(${beam.hue}, 0%, 70%, 0)`) // Gümüş/gri tonları
+      gradient.addColorStop(0, `hsla(${beam.hue}, 0%, 70%, 0)`)
+      gradient.addColorStop(0.5, `hsla(${beam.hue}, 0%, 70%, ${pulsingOpacity})`)
+      gradient.addColorStop(1, `hsla(${beam.hue}, 0%, 70%, 0)`)
       ctx.fillStyle = gradient
       ctx.fillRect(-beam.width / 2, 0, beam.width, beam.length)
       ctx.restore()
@@ -325,35 +292,17 @@ export default function HoldingNavigation({ className, intensity = "subtle" }: A
     }
   }, [intensity])
 
-  // Bir bölüme scroll
-  const scrollToSection = (id: string) => {
-    setIsMobileMenuOpen(false)
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }
-
-  // Glassmorphism stil sınıfları
-  const glassCard = "bg-white/20 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]"
-  const glassCardHover = "hover:bg-white/30 hover:shadow-[0_8px_32px_0_rgba(0,0,0,0.15)]"
-  const glassInput = "bg-white/20 backdrop-blur-xl border border-white/30 focus:border-white/50 focus:bg-white/30"
-  const glassButton =
-    "bg-gradient-to-r from-gray-500/80 to-gray-400/80 backdrop-blur-xl hover:from-gray-500/90 hover:to-gray-400/90"
-  const glassNav = "bg-white/10 backdrop-blur-2xl border-b border-white/20 shadow-[0_8px_32px_0_rgba(0,0,0,0.05)]"
-
-  // Ses kontrolü
   const toggleMute = () => {
     setIsMuted(!isMuted)
   }
 
+  // Unified glassmorphism styles
+  const glassPanel = "bg-white/20 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.1)]"
+  const lightReflection =
+    "absolute -top-1 left-10 right-10 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full"
+
   return (
-    <div
-      className={cn(
-        "relative min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-gray-50 via-white to-gray-100",
-        className,
-      )}
-    >
+    <div className={cn("relative w-full bg-gradient-to-br from-navy-900 via-blue-900 to-indigo-900", className)}>
       {/* Arka plan canvas */}
       <canvas ref={canvasRef} className="fixed inset-0 opacity-30" />
 
@@ -364,68 +313,72 @@ export default function HoldingNavigation({ className, intensity = "subtle" }: A
         <div className="absolute -bottom-20 left-1/3 w-72 h-72 rounded-full bg-gradient-to-br from-gray-200/20 to-white/20 blur-3xl"></div>
       </div>
 
-      {/* Scroll Indicator */}
       <ScrollIndicator />
 
-      {/* Navigasyon */}
+      {/* Navigasyon - Logo ve Şirket Linkleri */}
       <motion.nav
         className={`fixed top-0 left-0 right-0 z-50 w-full ${
-          scrollY > 50 ? `${glassNav} shadow-lg` : "bg-transparent"
+          scrollY > 50 ? "bg-white/10 backdrop-blur-2xl border-b border-white/20 shadow-lg" : "bg-transparent"
         } transition-all duration-300`}
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between h-20">
-            <Link href="/" passHref>
-              <div className="flex items-center cursor-pointer">
-                <span className="text-2xl font-bold text-white">TUNA GROUP</span>
-              </div>
+            {/* Logo */}
+            <Link href="/" className="flex items-center">
+              <img src="/images/tuna-group-logo.png" alt="Tuna Group Logo" className="h-10" />
             </Link>
-            <div className="hidden md:flex items-center space-x-2">
-              {sections.map((section) => (
-                <button
-                  key={section.id}
-                  onClick={() => scrollToSection(section.id)}
-                  className={cn(
-                    "px-4 py-2 rounded-full transition-all duration-200",
-                    activeSection === section.id
-                      ? "bg-gradient-to-r from-gray-500/80 to-gray-400/80 backdrop-blur-xl text-white shadow-lg"
-                      : "bg-white/10 backdrop-blur-lg text-white hover:bg-white/20",
-                  )}
-                >
-                  {section.title}
-                </button>
-              ))}
+
+            {/* Desktop Navigation */}
+            <div className="hidden lg:flex items-center space-x-6">
+              <a
+                href="https://tunamedikal.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors duration-200 font-medium"
+              >
+                <Stethoscope className="h-4 w-4" />
+                <span>Tuna Medikal</span>
+              </a>
+              <a
+                href="https://efesentetik.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors duration-200 font-medium"
+              >
+                <Pill className="h-4 w-4" />
+                <span>Efe Sentetik</span>
+              </a>
+              <a
+                href="https://efetip.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors duration-200 font-medium"
+              >
+                <Syringe className="h-4 w-4" />
+                <span>Efe Tıp</span>
+              </a>
+              <a
+                href="https://wellmed.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center space-x-2 text-white hover:text-gray-300 transition-colors duration-200 font-medium"
+              >
+                <HeartPulse className="h-4 w-4" />
+                <span>Wellmed</span>
+              </a>
             </div>
-            <div className="hidden md:flex items-center space-x-4">
-              {socialLinks.map((link, index) => (
-                <a
-                  key={index}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-white/20 backdrop-blur-xl p-2 rounded-full border border-white/30 text-white hover:bg-white/30 transition-all"
-                >
-                  {link.icon}
-                </a>
-              ))}
-            </div>
-            <div className="md:hidden">
+
+            {/* Mobile Menu Button */}
+            <div className="lg:hidden">
               <button
-                className="bg-white/20 backdrop-blur-xl p-2 rounded-full border border-white/30 text-white"
+                className="bg-white/20 backdrop-blur-xl p-3 rounded-full border border-white/30 text-white"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
             </div>
@@ -437,70 +390,71 @@ export default function HoldingNavigation({ className, intensity = "subtle" }: A
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 md:hidden"
+            className="fixed inset-0 z-40 lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <div
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setIsMobileMenuOpen(false)}
-            ></div>
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)} />
             <motion.div
-              className="absolute right-0 top-0 h-full w-64 bg-white/90 backdrop-blur-xl shadow-lg"
+              className="absolute right-0 top-0 h-full w-80 bg-white/90 backdrop-blur-xl shadow-lg"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 300 }}
             >
-              <div className="p-6 flex flex-col h-full">
+              <div className="p-8 flex flex-col h-full">
                 <div className="flex justify-end mb-8">
                   <button
-                    className="bg-white/20 backdrop-blur-xl p-2 rounded-full border border-white/30 text-gray-700"
+                    className="bg-white/20 backdrop-blur-xl p-3 rounded-full border border-white/30 text-gray-700"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-6 h-6"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </button>
                 </div>
                 <div className="flex flex-col space-y-4">
-                  {sections.map((section) => (
-                    <button
-                      key={section.id}
-                      onClick={() => scrollToSection(section.id)}
-                      className={cn(
-                        "px-4 py-3 rounded-lg transition-all duration-200 text-left",
-                        activeSection === section.id
-                          ? "bg-gradient-to-r from-gray-500/80 to-gray-400/80 backdrop-blur-xl text-white shadow-lg"
-                          : "bg-white/10 backdrop-blur-lg text-gray-700 hover:bg-white/20",
-                      )}
-                    >
-                      {section.title}
-                    </button>
-                  ))}
-                </div>
-                <div className="mt-auto">
-                  <div className="flex justify-center space-x-4 pt-6 border-t border-gray-200">
-                    {socialLinks.map((link, index) => (
-                      <a
-                        key={index}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="bg-white/20 backdrop-blur-xl p-2 rounded-full border border-white/30 text-gray-600 hover:bg-white/30 transition-all"
-                      >
-                        {link.icon}
-                      </a>
-                    ))}
-                  </div>
+                  <a
+                    href="https://tunamedikal.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-3 px-6 py-4 rounded-xl bg-white/10 backdrop-blur-lg text-gray-700 hover:bg-white/20 transition-all duration-200 font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Stethoscope className="h-5 w-5" />
+                    <span>Tuna Medikal</span>
+                  </a>
+                  <a
+                    href="https://efesentetik.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-3 px-6 py-4 rounded-xl bg-white/10 backdrop-blur-lg text-gray-700 hover:bg-white/20 transition-all duration-200 font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Pill className="h-5 w-5" />
+                    <span>Efe Sentetik</span>
+                  </a>
+                  <a
+                    href="https://efetip.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-3 px-6 py-4 rounded-xl bg-white/10 backdrop-blur-lg text-gray-700 hover:bg-white/20 transition-all duration-200 font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <Syringe className="h-5 w-5" />
+                    <span>Efe Tıp</span>
+                  </a>
+                  <a
+                    href="https://wellmed.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center space-x-3 px-6 py-4 rounded-xl bg-white/10 backdrop-blur-lg text-gray-700 hover:bg-white/20 transition-all duration-200 font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <HeartPulse className="h-5 w-5" />
+                    <span>Wellmed</span>
+                  </a>
                 </div>
               </div>
             </motion.div>
@@ -508,466 +462,344 @@ export default function HoldingNavigation({ className, intensity = "subtle" }: A
         )}
       </AnimatePresence>
 
-      {/* Hero Bölümü - Video Arka Plan */}
-      <section id="hero" className="relative min-h-screen flex items-center justify-center">
+      {/* Modern Video Slider */}
+      <section className="relative h-screen overflow-hidden">
         {/* Video Arka Plan */}
-        <div className="absolute inset-0 w-full h-full overflow-hidden">
-          {/* Video */}
-          <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover" autoPlay loop muted playsInline>
-            <source src="/videos/background.mp4" type="video/mp4" />
+        <div className="absolute inset-0">
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full object-cover"
+            loop
+            muted={isMuted}
+            playsInline
+            preload="metadata"
+          >
+            <source
+              src="https://stinvenireaz084550184237.blob.core.windows.net/invenirecomtr-website/WhatsApp Video 2025-06-14 at 12.35.24_588fdc09.mp4"
+              type="video/mp4"
+            />
           </video>
 
-          {/* Siyah noktalı overlay */}
+          {/* Daha küçük ve sık dotted overlay */}
           <div
-            className="absolute inset-0 z-10 bg-black/70"
+            className="absolute inset-0 bg-black/60"
+            style={{
+              backgroundImage:
+                "radial-gradient(rgba(0, 0, 0, 0.4) 1px, transparent 1px), radial-gradient(rgba(0, 0, 0, 0.4) 1px, transparent 1px)",
+              backgroundSize: "8px 8px",
+              backgroundPosition: "0 0, 4px 4px",
+            }}
+          />
+
+          {/* Video Kontrolleri */}
+          <div className="absolute bottom-8 right-8 flex space-x-4 z-20">
+            {/* Play Button - sadece gerektiğinde göster */}
+            {showPlayButton && (
+              <button
+                onClick={handlePlayClick}
+                className="bg-white/20 backdrop-blur-xl p-4 rounded-full border border-white/30 text-white hover:bg-white/30 transition-all"
+                aria-label="Videoyu Oynat"
+              >
+                <Play className="h-6 w-6" />
+              </button>
+            )}
+
+            {/* Ses Kontrolü */}
+            <button
+              onClick={toggleMute}
+              className="bg-white/20 backdrop-blur-xl p-4 rounded-full border border-white/30 text-white hover:bg-white/30 transition-all"
+              aria-label={isMuted ? "Sesi Aç" : "Sesi Kapat"}
+            >
+              {isMuted ? <VolumeX className="h-6 w-6" /> : <Volume2 className="h-6 w-6" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Tek Sayfa İçerik */}
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="max-w-7xl mx-auto px-6 w-full text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              className={`${glassPanel} p-16 rounded-3xl relative max-w-4xl mx-auto`}
+            >
+              <div className={lightReflection} />
+              <h1 className="text-7xl font-bold text-white mb-6">Tuna Group</h1>
+              <h2 className="text-4xl font-semibold text-gray-200 mb-8">Geleceği Şekillendiren Güç</h2>
+              <p className="text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto">
+                Çeşitli sektörlerde faaliyet gösteren güçlü şirketlerimizle Türkiye ekonomisine katkı sağlıyoruz.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Ana İçerik Bölümü */}
+      <section className="relative py-20">
+        {/* Arka Plan Fotoğrafı */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: "url('/images/mountain-peak.jpeg')" }}
+          />
+          <div
+            className="absolute inset-0 bg-black/70"
             style={{
               backgroundImage:
                 "radial-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px), radial-gradient(rgba(0, 0, 0, 0.2) 1px, transparent 1px)",
-              backgroundSize: "20px 20px",
-              backgroundPosition: "0 0, 10px 10px",
+              backgroundSize: "8px 8px",
+              backgroundPosition: "0 0, 4px 4px",
             }}
-          ></div>
-
-          {/* Ses Kontrolü */}
-          <button
-            onClick={toggleMute}
-            className="absolute bottom-8 right-8 z-20 bg-white/20 backdrop-blur-xl p-3 rounded-full border border-white/30 text-white hover:bg-white/30 transition-all"
-            aria-label={isMuted ? "Sesi Aç" : "Sesi Kapat"}
-          >
-            {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
-          </button>
+          />
         </div>
 
-        {/* Hero İçeriği */}
-        <div className="relative z-20 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+        {/* Ana İçerik - Tek Glassmorphism Frame */}
+        <div className="relative z-20 max-w-7xl mx-auto p-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative"
+            className={`${glassPanel} rounded-3xl p-12 relative`}
           >
-            {/* Cam panel */}
-            <div className="relative bg-white/20 backdrop-blur-xl p-10 md:p-16 rounded-3xl border border-white/30 shadow-[0_8px_32px_0_rgba(0,0,0,0.15)]">
-              {/* Işık yansıması efekti */}
-              <div className="absolute -top-1 left-20 right-20 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full"></div>
+            {/* Işık yansıması */}
+            <div className={lightReflection} />
 
-              <motion.button
-                onClick={() => scrollToSection("companies")}
-                className={`${glassButton} text-white font-semibold py-3 px-8 rounded-full text-lg transition-all duration-300 shadow-lg hover:shadow-gray-300/50 flex items-center mx-auto`}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.6 }}
-              >
-                Şirketlerimizi Keşfedin <ChevronDown className="ml-2 h-5 w-5" />
-              </motion.button>
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Scroll Down Animation */}
-        <motion.div
-          className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-20"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-        >
-          <ArrowDown className="h-8 w-8 text-white" />
-        </motion.div>
-      </section>
-
-      {/* Bakım Popup */}
-      <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:bottom-4 md:w-96 z-50">
-        <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 1 }}
-          className="bg-white/90 backdrop-blur-xl p-4 rounded-lg shadow-lg border border-gray-300"
-        >
-          <div className="flex items-start justify-between">
-            <div className="flex items-center">
-              <div className="bg-yellow-100 p-2 rounded-full mr-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-yellow-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-bold text-gray-900">Bakım Bildirimi</h3>
-                <p className="text-sm text-gray-700">
-                  Web sitemiz şu anda bakım aşamasındadır. En kısa sürede hizmetinize sunulacaktır.
+            {/* Şirket Kartları - Tek Sütun */}
+            <div className="space-y-12 mb-20">
+              <div className="text-center mb-16">
+                <h2 className="text-5xl font-bold text-white mb-6">Şirketlerimiz</h2>
+                <p className="text-gray-200 text-xl max-w-3xl mx-auto">
+                  Farklı sektörlerde faaliyet gösteren güçlü şirketlerimizle Türkiye ekonomisine katkı sağlıyoruz
                 </p>
               </div>
-            </div>
-            <button
-              className="text-gray-500 hover:text-gray-700"
-              onClick={() => {
-                const popup = document.querySelector(".fixed.bottom-4")
-                if (popup) popup.classList.add("hidden")
-              }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </button>
-          </div>
-        </motion.div>
-      </div>
 
-      {/* Şirketler Bölümü */}
-      <section id="companies" className="relative py-20 px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col justify-center">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="inline-block bg-white/20 backdrop-blur-xl px-4 py-1 rounded-full border border-white/30 mb-2">
-              <h2 className="text-sm font-semibold text-gray-600 tracking-wide uppercase">
-                {sections.find((s) => s.id === "companies")?.subtitle}
-              </h2>
-            </div>
-            <h3 className="mt-2 text-4xl font-bold text-gray-800 sm:text-5xl">
-              {sections.find((s) => s.id === "companies")?.title}
-            </h3>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {companies.map((company, index) => (
-              <motion.div
-                key={company.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <CompanyCard
-                  name={company.name}
-                  description={company.description}
-                  icon={company.icon}
-                  color={company.color}
-                  gradientFrom={company.gradientFrom}
-                  gradientTo={company.gradientTo}
-                  image={company.image}
-                  details={company.details}
-                />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Hakkımızda Bölümü */}
-      <ParallaxSection
-        id="about"
-        className="py-20 px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col justify-center"
-        imageUrl="/images/mountain-peak.jpeg"
-      >
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="inline-block bg-white/20 backdrop-blur-xl px-4 py-1 rounded-full border border-white/30 mb-2">
-              <h2 className="text-sm font-semibold text-white tracking-wide uppercase">
-                {sections.find((s) => s.id === "about")?.subtitle}
-              </h2>
-            </div>
-            <h3 className="mt-2 text-4xl font-bold text-white sm:text-5xl">
-              {sections.find((s) => s.id === "about")?.title}
-            </h3>
-          </motion.div>
-
-          <div className="relative">
-            {/* Arka plan efekti */}
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-200/20 to-gray-300/20 rounded-3xl blur-3xl transform scale-105"></div>
-
-            <div className={`${glassCard} p-8 md:p-12 rounded-3xl relative`}>
-              {/* Işık yansıması efekti */}
-              <div className="absolute -top-1 left-20 right-20 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full"></div>
-
-              <div className="grid md:grid-cols-2 gap-12">
+              {companies.map((company, index) => (
                 <motion.div
-                  className="space-y-6"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  key={company.name}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  className={`${glassPanel} rounded-3xl p-10 hover:bg-white/30 transition-all duration-300 group cursor-pointer relative`}
+                  whileHover={{ y: -5, scale: 1.01 }}
                 >
-                  <h4 className="text-2xl font-bold text-gray-800">Vizyonumuz</h4>
-                  <p className="text-gray-700 leading-relaxed">
-                    Tuna Group olarak, faaliyet gösterdiğimiz tüm sektörlerde global bir marka olmayı ve yenilikçi
-                    çözümlerimizle dünya standartlarında hizmet sunmayı hedefliyoruz. Sürdürülebilir büyüme stratejileri
-                    ile gelecek nesillere daha iyi bir dünya bırakmak için çalışıyoruz.
-                  </p>
+                  {/* Işık yansıması */}
+                  <div className="absolute -top-1 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full" />
 
-                  <h4 className="text-2xl font-bold text-gray-800 pt-6">Misyonumuz</h4>
-                  <p className="text-gray-700 leading-relaxed">
-                    Faaliyet gösterdiğimiz her alanda en yüksek kalite standartlarını koruyarak, müşterilerimize,
-                    çalışanlarımıza ve topluma değer katmak. Etik değerlerimizden ödün vermeden, sürekli gelişim ve
-                    inovasyon ile sektörlerimizde öncü olmak için çalışıyoruz.
-                  </p>
-                </motion.div>
-
-                <motion.div
-                  className="grid grid-cols-2 gap-6"
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8 }}
-                >
-                  {[
-                    { label: "Yıllık Deneyim", value: "35+" },
-                    { label: "Faaliyet Ülkesi", value: "20+" },
-                    { label: "Çalışan Sayısı", value: "10K+" },
-                    { label: "Tamamlanan Proje", value: "500+" },
-                  ].map((item, index) => (
-                    <motion.div
-                      key={item.label}
-                      className="bg-white/30 backdrop-blur-xl p-6 rounded-xl text-center shadow-lg border border-white/40 relative overflow-hidden"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      whileHover={{ scale: 1.05 }}
+                  {/* İçerik Grid - Görseli kaldır */}
+                  <div className="flex items-start space-x-6">
+                    <div
+                      className={`p-6 rounded-2xl bg-gradient-to-r ${company.gradientFrom} ${company.gradientTo} shadow-lg flex-shrink-0`}
                     >
-                      {/* Işık yansıması efekti */}
-                      <div className="absolute -top-1 left-5 right-5 h-0.5 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full"></div>
-
-                      <p className="text-4xl font-bold mb-2 bg-gradient-to-r from-gray-700 to-gray-500 bg-clip-text text-transparent">
-                        {item.value}
-                      </p>
-                      <p className="text-gray-700 font-medium">{item.label}</p>
-                    </motion.div>
-                  ))}
-                </motion.div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ParallaxSection>
-
-      {/* İletişim Bölümü */}
-      <section id="contact" className="relative py-20 px-4 sm:px-6 lg:px-8 min-h-screen flex flex-col justify-center">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="inline-block bg-white/20 backdrop-blur-xl px-4 py-1 rounded-full border border-white/30 mb-2">
-              <h2 className="text-sm font-semibold text-gray-600 tracking-wide uppercase">
-                {sections.find((s) => s.id === "contact")?.subtitle}
-              </h2>
-            </div>
-            <h3 className="mt-2 text-4xl font-bold text-gray-800 sm:text-5xl">
-              {sections.find((s) => s.id === "contact")?.title}
-            </h3>
-          </motion.div>
-
-          {/* İletişim Bilgileri */}
-          <div className="relative mb-16">
-            {/* Arka plan efekti */}
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-200/20 to-gray-300/20 rounded-3xl blur-3xl transform scale-105"></div>
-
-            <div className={`${glassCard} p-8 md:p-12 rounded-3xl relative`}>
-              {/* Işık yansıması efekti */}
-              <div className="absolute -top-1 left-20 right-20 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full"></div>
-
-              <h4 className="text-2xl font-bold text-gray-800 mb-8 text-center">İletişim Bilgilerimiz</h4>
-
-              <div className="grid md:grid-cols-3 gap-8">
-                {[
-                  {
-                    icon: <MapPin className="h-6 w-6 text-gray-600" />,
-                    title: "Adres",
-                    lines: ["Tuna Plaza, Levent Mah.", "Büyükdere Cad. No:123", "34330 Levent / İstanbul"],
-                  },
-                  {
-                    icon: <Phone className="h-6 w-6 text-gray-600" />,
-                    title: "Telefon",
-                    lines: ["+90 (212) 123 45 67", "+90 (212) 123 45 68"],
-                  },
-                  {
-                    icon: <Mail className="h-6 w-6 text-gray-600" />,
-                    title: "E-posta",
-                    lines: ["info@tunagroup.com", "kariyer@tunagroup.com"],
-                  },
-                ].map((item, index) => (
-                  <motion.div
-                    key={item.title}
-                    className="flex flex-col items-center text-center"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                  >
-                    <div className="bg-white/30 backdrop-blur-xl p-4 rounded-full border border-white/40 shadow-md mb-4">
-                      {item.icon}
+                      {company.icon}
                     </div>
-                    <h5 className="text-xl font-semibold text-gray-800 mb-2">{item.title}</h5>
-                    {item.lines.map((line) => (
-                      <p key={line} className="text-gray-700">
-                        {line}
-                      </p>
+                    <div className="flex-1">
+                      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between mb-4">
+                        <h3 className="text-3xl font-bold text-gray-800 mb-2 lg:mb-0 group-hover:text-gray-700 transition-colors">
+                          {company.name}
+                        </h3>
+                        <a
+                          href={company.website}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center text-blue-600 hover:text-blue-500 font-medium transition-colors"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <Globe className="h-5 w-5 mr-2" />
+                          Web Sitesi
+                        </a>
+                      </div>
+                      <p className="text-gray-700 leading-relaxed text-lg">{company.description}</p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Hakkımızda Bölümü */}
+            <div className="border-t border-white/20 pt-20">
+              {/* Başlık */}
+              <div className="text-center mb-20">
+                <div className="inline-block bg-white/20 backdrop-blur-xl px-8 py-3 rounded-full border border-white/30 mb-6">
+                  <h2 className="text-lg font-semibold text-white tracking-wide uppercase">Biz Kimiz?</h2>
+                </div>
+                <h3 className="text-6xl font-bold text-white mb-6">Hakkımızda</h3>
+                <p className="text-gray-200 text-2xl max-w-4xl mx-auto leading-relaxed">
+                  Tuna Group olarak, çeşitli sektörlerde faaliyet gösteren güçlü şirketlerimizle Türkiye ekonomisine
+                  katkı sağlıyoruz.
+                </p>
+              </div>
+
+              {/* İçerik Grid */}
+              <div className="grid lg:grid-cols-2 gap-20 mb-20">
+                {/* Sol Taraf - Misyon ve Vizyon */}
+                <motion.div
+                  className="space-y-12"
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                >
+                  <div className={`${glassPanel} p-10 rounded-3xl relative`}>
+                    <div className="absolute -top-1 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full" />
+                    <div className="flex items-start space-x-6">
+                      <div className="p-4 rounded-2xl bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg flex-shrink-0">
+                        <Target className="h-8 w-8 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-3xl font-bold text-white mb-6">Misyonumuz</h4>
+                        <p className="text-gray-200 leading-relaxed text-lg">
+                          Endüstriyel ve ticari sektörlerin ihtiyaçlarına uygun, yüksek kaliteli pp çuval üretimi
+                          gerçekleştirmek. Müşteri memnuniyetini ve iş birliğini ön planda tutarak, üretim süreçlerimize
+                          en son teknolojik yenilikleri entegre etmek ve çevreye duyarlı yaklaşımımızla topluma değer
+                          katmak.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={`${glassPanel} p-10 rounded-3xl relative`}>
+                    <div className="absolute -top-1 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full" />
+                    <div className="flex items-start space-x-6">
+                      <div className="p-4 rounded-2xl bg-gradient-to-r from-purple-400 to-purple-600 shadow-lg flex-shrink-0">
+                        <Lightbulb className="h-8 w-8 text-white" />
+                      </div>
+                      <div>
+                        <h4 className="text-3xl font-bold text-white mb-6">Vizyonumuz</h4>
+                        <p className="text-gray-200 leading-relaxed text-lg">
+                          Sürdürülebilirlik, kalite ve yenilik odaklı yaklaşımımızla çuval üretiminde sektörün lider
+                          markası olmayı hedefliyoruz. Müşterilerimizin ihtiyaçlarını en iyi şekilde karşılayan, çevreye
+                          duyarlı ve yenilikçi çözümlerimizle sektörde fark yaratmaya devam ediyoruz.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Sağ Taraf - İstatistikler ve Görsel */}
+                <motion.div
+                  className="space-y-8"
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8 }}
+                >
+                  <div className="text-center mb-10">
+                    <h4 className="text-3xl font-bold text-white mb-4">Rakamlarla Tuna Group</h4>
+                    <p className="text-gray-200 text-lg">Başarılarımızı gösteren önemli veriler</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-8">
+                    {[
+                      { label: "Yıllık Deneyim", value: "35+", icon: <Award className="h-8 w-8" /> },
+                      { label: "Faaliyet Ülkesi", value: "10+", icon: <Globe className="h-8 w-8" /> },
+                    ].map((item, index) => (
+                      <motion.div
+                        key={item.label}
+                        className={`${glassPanel} p-10 rounded-3xl text-center relative`}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: index * 0.1 }}
+                        whileHover={{ scale: 1.05 }}
+                      >
+                        {/* Işık yansıması */}
+                        <div className="absolute -top-1 left-6 right-6 h-0.5 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full" />
+
+                        <div className="flex justify-center mb-6 text-white">{item.icon}</div>
+                        <p className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                          {item.value}
+                        </p>
+                        <p className="text-white font-medium text-lg">{item.label}</p>
+                      </motion.div>
                     ))}
+                  </div>
+
+                  {/* Analytics Görseli */}
+                  <div className={`${glassPanel} p-8 rounded-3xl relative overflow-hidden`}>
+                    <div className="absolute -top-1 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full" />
+                    <img
+                      src="/images/analytics-charts.jpeg"
+                      alt="Analytics"
+                      className="w-full h-64 object-cover rounded-2xl"
+                    />
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* İletişim Bilgileri - Tek Pencere */}
+              <div className="border-t border-white/20 pt-20">
+                <div className="text-center mb-16">
+                  <h4 className="text-5xl font-bold text-white mb-6">İletişim</h4>
+                  <p className="text-gray-200 text-xl">Bizimle iletişime geçin, projelerinizde yanınızda olalım</p>
+                </div>
+
+                <div className="flex justify-center">
+                  <motion.div
+                    className={`${glassPanel} p-12 rounded-3xl relative max-w-4xl w-full`}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <div className="absolute -top-1 left-8 right-8 h-0.5 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full" />
+
+                    <div className="grid md:grid-cols-2 gap-12">
+                      {/* Sol Taraf - Adres */}
+                      <div className="flex items-start space-x-6">
+                        <div className="p-5 rounded-2xl bg-gradient-to-r from-red-400 to-red-600 shadow-lg flex-shrink-0">
+                          <MapPin className="h-8 w-8 text-white" />
+                        </div>
+                        <div>
+                          <h5 className="text-2xl font-bold text-white mb-4">Genel Merkez</h5>
+                          <p className="text-gray-200 leading-relaxed">
+                            BAŞPINAR(ORGANİZE)OSB MAH. O.S.B 3.BÖLGE KAMİL ŞERBETCİ BLV. NO: 39 ŞEHİTKAMİL/ GAZİANTEP
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Sağ Taraf - Diğer İletişim Bilgileri */}
+                      <div className="space-y-6">
+                        <div className="flex items-center space-x-4">
+                          <div className="p-3 rounded-xl bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg flex-shrink-0">
+                            <Phone className="h-6 w-6 text-white" />
+                          </div>
+                          <div>
+                            <h6 className="text-lg font-bold text-white">Telefon</h6>
+                            <p className="text-gray-200 text-xl font-semibold">0342 360 98 55</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-4">
+                          <div className="p-3 rounded-xl bg-gradient-to-r from-green-400 to-green-600 shadow-lg flex-shrink-0">
+                            <Mail className="h-6 w-6 text-white" />
+                          </div>
+                          <div>
+                            <h6 className="text-lg font-bold text-white">E-posta</h6>
+                            <p className="text-gray-200 text-lg">info@tunagroup.com.tr</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-4">
+                          <div className="p-3 rounded-xl bg-gradient-to-r from-purple-400 to-purple-600 shadow-lg flex-shrink-0">
+                            <Globe className="h-6 w-6 text-white" />
+                          </div>
+                          <div>
+                            <h6 className="text-lg font-bold text-white">Web</h6>
+                            <p className="text-gray-200 text-lg">www.tunagroup.com.tr</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </motion.div>
-                ))}
+                </div>
               </div>
             </div>
-          </div>
-
-          {/* Bize Ulaşın Formu */}
-          <div className="relative">
-            {/* Arka plan efekti */}
-            <div className="absolute inset-0 bg-gradient-to-r from-gray-200/20 to-gray-300/20 rounded-3xl blur-3xl transform scale-105"></div>
-
-            <div className={`${glassCard} p-8 md:p-12 rounded-3xl relative`}>
-              {/* Işık yansıması efekti */}
-              <div className="absolute -top-1 left-20 right-20 h-1 bg-gradient-to-r from-transparent via-white/80 to-transparent rounded-full"></div>
-
-              <h4 className="text-2xl font-bold text-gray-800 mb-8 text-center">Bize Ulaşın</h4>
-
-              <form className="max-w-2xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5 }}
-                    className="relative"
-                  >
-                    <input
-                      type="text"
-                      placeholder="Adınız"
-                      className={`w-full ${glassInput} p-3 rounded-lg text-gray-800 placeholder-gray-400 outline-none transition-all`}
-                    />
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.1 }}
-                    className="relative"
-                  >
-                    <input
-                      type="text"
-                      placeholder="Soyadınız"
-                      className={`w-full ${glassInput} p-3 rounded-lg text-gray-800 placeholder-gray-400 outline-none transition-all`}
-                    />
-                  </motion.div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
-                    className="relative"
-                  >
-                    <input
-                      type="email"
-                      placeholder="E-posta Adresiniz"
-                      className={`w-full ${glassInput} p-3 rounded-lg text-gray-800 placeholder-gray-400 outline-none transition-all`}
-                    />
-                  </motion.div>
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 }}
-                    className="relative"
-                  >
-                    <input
-                      type="tel"
-                      placeholder="Telefon Numaranız"
-                      className={`w-full ${glassInput} p-3 rounded-lg text-gray-800 placeholder-gray-400 outline-none transition-all`}
-                    />
-                  </motion.div>
-                </div>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                  className="relative mb-6"
-                >
-                  <input
-                    type="text"
-                    placeholder="Konu"
-                    className={`w-full ${glassInput} p-3 rounded-lg text-gray-800 placeholder-gray-400 outline-none transition-all`}
-                  />
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.5 }}
-                  className="relative mb-6"
-                >
-                  <textarea
-                    placeholder="Mesajınız"
-                    rows={4}
-                    className={`w-full ${glassInput} p-3 rounded-lg text-gray-800 placeholder-gray-400 outline-none transition-all`}
-                  ></textarea>
-                </motion.div>
-                <motion.div
-                  className="flex justify-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.6 }}
-                >
-                  <motion.button
-                    type="submit"
-                    className={`${glassButton} text-white font-semibold py-3 px-8 rounded-lg text-lg transition-all duration-300 shadow-lg hover:shadow-gray-300/50`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Mesajı Gönder
-                  </motion.button>
-                </motion.div>
-              </form>
-            </div>
-          </div>
+          </motion.div>
         </div>
       </section>
-
-      {/* Dalgalı Animasyon */}
-      <div className="relative h-40 overflow-hidden">
-        <LottiePlayer src="/lottie/wave.json" className="w-full absolute bottom-0" />
-      </div>
-
-      {/* Footer */}
-      <motion.footer
-        className="relative z-10 w-full py-8 text-center bg-white/20 backdrop-blur-xl border-t border-white/30 shadow-[0_-8px_32px_0_rgba(0,0,0,0.05)]"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-      >
-        <p className="text-sm text-gray-700">© {new Date().getFullYear()} Tuna Group. Tüm Hakları Saklıdır.</p>
-      </motion.footer>
     </div>
   )
 }
