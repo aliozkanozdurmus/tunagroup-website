@@ -8,10 +8,10 @@ export default function ModernNav() {
   const [isOpen, setIsOpen] = useState(false)
   
   const links = [
-    { name: "About", href: "#about" },
-    { name: "Sectors", href: "#sectors" },
-    { name: "Impact", href: "#impact" },
-    { name: "Contact", href: "#contact" },
+    { name: "Hakkımızda", href: "#hakkimizda" },
+    { name: "Değerlerimiz", href: "#degerlerimiz" },
+    { name: "İstatistikler", href: "#istatistikler" },
+    { name: "İletişim", href: "#iletisim" },
   ]
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -55,13 +55,13 @@ export default function ModernNav() {
               </motion.a>
             ))}
             <motion.a
-              href="#contact"
-              onClick={(e) => scrollToSection(e, '#contact')}
+              href="#iletisim"
+              onClick={(e) => scrollToSection(e, '#iletisim')}
               className="px-8 py-3 border-2 border-gray-900 text-gray-900 text-sm uppercase tracking-wider hover:bg-gray-900 hover:text-white transition-all cursor-pointer"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Let's Talk
+              İletişim
             </motion.a>
           </div>
           
@@ -92,11 +92,11 @@ export default function ModernNav() {
               </a>
             ))}
             <a
-              href="#contact"
-              onClick={(e) => scrollToSection(e, '#contact')}
+              href="#iletisim"
+              onClick={(e) => scrollToSection(e, '#iletisim')}
               className="block px-8 py-3 border-2 border-gray-900 text-gray-900 text-center hover:bg-gray-900 hover:text-white transition-all cursor-pointer uppercase tracking-wider text-sm"
             >
-              Let's Talk
+              İletişim
             </a>
           </motion.div>
         )}

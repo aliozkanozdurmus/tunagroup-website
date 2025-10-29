@@ -1,11 +1,11 @@
 import Preloader from "@/components/preloader"
 import ModernNav from "@/components/modern-nav"
-import ModernHero from "@/components/modern-hero"
-import ModernStats from "@/components/modern-stats"
-import ModernServices from "@/components/modern-services"
-import ModernAbout from "@/components/modern-about"
-import ModernContact from "@/components/modern-contact"
-import ModernFooter from "@/components/modern-footer"
+import HeroSlider from "@/components/hero-slider"
+import AboutSection from "@/components/about-section"
+import StatsSection from "@/components/stats-section"
+import ValuesSection from "@/components/values-section"
+import ContactSection from "@/components/contact-section"
+import FooterSection from "@/components/footer-section"
 
 export default function Home() {
   return (
@@ -13,12 +13,12 @@ export default function Home() {
       <Preloader />
       <main className="min-h-screen bg-white">
         <ModernNav />
-        <ModernHero />
-        <ModernStats />
-        <ModernServices />
-        <ModernAbout />
-        <ModernContact />
-        <ModernFooter />
+        <HeroSlider />
+        <AboutSection />
+        <StatsSection />
+        <ValuesSection />
+        <ContactSection />
+        <FooterSection />
       </main>
     </>
   )
