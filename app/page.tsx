@@ -1,24 +1,26 @@
-import Preloader from "@/components/preloader"
-import ModernNav from "@/components/modern-nav"
-import HeroSlider from "@/components/hero-slider"
-import AboutSection from "@/components/about-section"
-import StatsSection from "@/components/stats-section"
-import ValuesSection from "@/components/values-section"
-import ContactSection from "@/components/contact-section"
-import FooterSection from "@/components/footer-section"
+import LuxuryPreloader from "@/components/luxury-preloader"
+import LuxuryNavigation from "@/components/luxury-navigation"
+import LuxuryHero from "@/components/luxury-hero"
+import LuxuryAbout from "@/components/luxury-about"
+import LuxuryStats from "@/components/luxury-stats"
+import LuxuryVisionMission from "@/components/luxury-vision-mission"
+import LuxuryValues from "@/components/luxury-values"
+import LuxuryContact from "@/components/luxury-contact"
+import LuxuryFooter from "@/components/luxury-footer"
 
 export default function Home() {
   return (
     <>
-      <Preloader />
+      <LuxuryPreloader />
       <main className="min-h-screen bg-white">
-        <ModernNav />
-        <HeroSlider />
-        <AboutSection />
-        <StatsSection />
-        <ValuesSection />
-        <ContactSection />
-        <FooterSection />
+        <LuxuryNavigation />
+        <LuxuryHero />
+        <LuxuryAbout />
+        <LuxuryStats />
+        <LuxuryVisionMission />
+        <LuxuryValues />
+        <LuxuryContact />
+        <LuxuryFooter />
       </main>
     </>
   )
