@@ -28,25 +28,30 @@ export default function LuxuryFooter() {
   }
 
   return (
-    <footer className="relative bg-navy-900 text-white overflow-hidden">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-corporate-400 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-corporate-600 rounded-full blur-3xl" />
-      </div>
-
-      {/* Back to Top Button */}
-      <div className="relative z-10 flex justify-center -mt-6">
+    <>
+      {/* Back to Top Button - Outside footer for proper visibility */}
+      <div className="relative z-20 flex justify-center">
         <motion.button
           onClick={scrollToTop}
-          className="w-12 h-12 bg-corporate-600 hover:bg-corporate-500 flex items-center justify-center transition-colors duration-300"
-          whileHover={{ y: -3 }}
+          className="w-12 h-12 bg-corporate-600 hover:bg-corporate-500 flex items-center justify-center transition-colors duration-300 -mb-6 shadow-lg"
+          whileHover={{ y: -3, scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           aria-label="Back to top"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.3 }}
         >
-          <ArrowUp className="w-5 h-5" />
+          <ArrowUp className="w-5 h-5 text-white" />
         </motion.button>
       </div>
+      
+      <footer className="relative bg-navy-900 text-white overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-corporate-400 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-corporate-600 rounded-full blur-3xl" />
+        </div>
 
       {/* Main Footer Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 lg:px-6 py-10 lg:py-12">
@@ -209,5 +214,6 @@ export default function LuxuryFooter() {
         </motion.div>
       </div>
     </footer>
+    </>
   )
 }

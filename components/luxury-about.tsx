@@ -1,12 +1,94 @@
 "use client"
 
-import { motion } from "motion/react"
+import { motion, useScroll, useTransform } from "motion/react"
+import { useRef } from "react"
 import Link from "next/link"
 
-export default function LuxuryAbout() {
+// Decorative floating elements for about section
+function AboutFloatingElements() {
   return (
-    <section id="hakkimizda" className="py-12 lg:py-16 px-4 lg:px-6 bg-white overflow-hidden">
-      <div className="max-w-5xl mx-auto">
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {/* Large faded circle */}
+      <motion.div
+        className="absolute w-96 h-96 rounded-full border border-corporate-100"
+        style={{ top: "-15%", right: "-10%" }}
+        animate={{
+          rotate: [0, 360],
+        }}
+        transition={{
+          duration: 60,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      />
+      
+      {/* Small square */}
+      <motion.div
+        className="absolute w-16 h-16 border border-corporate-100"
+        style={{ bottom: "20%", left: "5%" }}
+        animate={{
+          rotate: [0, 90, 0],
+          y: [0, -10, 0],
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+      
+      {/* Gradient line */}
+      <motion.div
+        className="absolute h-px w-32 bg-gradient-to-r from-transparent via-corporate-200 to-transparent"
+        style={{ top: "40%", left: "10%" }}
+        animate={{
+          opacity: [0.3, 0.7, 0.3],
+          x: [0, 20, 0],
+        }}
+        transition={{
+          duration: 5,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      />
+      
+      {/* Dots pattern */}
+      <div className="absolute top-1/4 right-1/4 grid grid-cols-3 gap-2">
+        {[...Array(9)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="w-1.5 h-1.5 rounded-full bg-corporate-100"
+            animate={{
+              opacity: [0.2, 0.6, 0.2],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              delay: i * 0.1,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default function LuxuryAbout() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  })
+  
+  const imageY = useTransform(scrollYProgress, [0, 1], [50, -50])
+  const contentY = useTransform(scrollYProgress, [0, 1], [30, -30])
+
+  return (
+    <section ref={sectionRef} id="hakkimizda" className="relative py-12 lg:py-16 px-4 lg:px-6 bg-white overflow-hidden">
+      {/* Floating decorative elements */}
+      <AboutFloatingElements />
+      
+      <div className="relative z-10 max-w-5xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Text Content */}
           <motion.div
@@ -93,50 +175,87 @@ export default function LuxuryAbout() {
             </motion.div>
           </motion.div>
 
-          {/* Image Section */}
+          {/* Image Section with Parallax */}
           <motion.div
             className="relative"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
+            style={{ y: imageY }}
           >
             {/* Main Image */}
             <div className="relative z-10">
-              <div className="relative overflow-hidden">
+              <div className="relative overflow-hidden group">
                 <motion.img
                   src="/images/pexels/about-medical.jpg"
                   alt="Tuna Group - Sağlık Teknolojileri"
-                  className="w-full h-[300px] lg:h-[400px] object-cover"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.6 }}
+                  className="w-full h-[300px] lg:h-[400px] object-cover transition-transform duration-700 group-hover:scale-110"
                 />
                 {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-corporate-900/30 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-corporate-900/30 to-transparent group-hover:from-corporate-900/10 transition-all duration-500" />
+                
+                {/* Shine effect on hover */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
               </div>
               
-              {/* Image Badge */}
+              {/* Image Badge - Enhanced */}
               <motion.div
-                className="absolute -bottom-4 -left-4 bg-corporate-900 text-white p-4 lg:p-6"
+                className="absolute -bottom-4 -left-4 bg-corporate-900 text-white p-4 lg:p-6 overflow-hidden"
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.5 }}
+                whileHover={{ scale: 1.05 }}
               >
-                <div className="text-3xl lg:text-4xl font-bold mb-1">24+</div>
-                <div className="text-xs lg:text-sm text-white/80 uppercase tracking-wider">Yıllık Tecrübe</div>
+                <motion.div
+                  className="text-3xl lg:text-4xl font-bold mb-1"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: 0.6 }}
+                >
+                  24+
+                </motion.div>
+                <motion.div
+                  className="text-xs lg:text-sm text-white/80 uppercase tracking-wider"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.3, delay: 0.7 }}
+                >
+                  Yıllık Tecrübe
+                </motion.div>
+                {/* Badge decoration */}
+                <div className="absolute top-2 right-2 w-2 h-2 bg-white/20 rounded-full" />
               </motion.div>
             </div>
 
-            {/* Decorative Elements */}
-            <div className="absolute -top-4 -right-4 w-full h-full border-2 border-corporate-200 -z-10" />
+            {/* Enhanced Decorative Elements */}
+            <motion.div
+              className="absolute -top-4 -right-4 w-full h-full border-2 border-corporate-200 -z-10"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+            />
             <motion.div
               className="absolute -bottom-8 -right-8 w-32 h-32 bg-corporate-100 -z-20"
-              animate={{ 
+              animate={{
                 scale: [1, 1.1, 1],
                 rotate: [0, 5, 0]
               }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            />
+            
+            {/* Additional floating element */}
+            <motion.div
+              className="absolute -top-6 right-1/4 w-4 h-4 border border-corporate-300 rotate-45"
+              animate={{
+                y: [0, -8, 0],
+                rotate: [45, 90, 45],
+              }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             />
           </motion.div>
         </div>
