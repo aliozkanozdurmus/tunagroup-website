@@ -13,7 +13,7 @@ export default function HakkimizdaPage() {
       <LuxuryNavigation />
       {/* Page Hero */}
       <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: "url(/images/pexels/gallery-6.jpg)" }}
         />
@@ -26,26 +26,6 @@ export default function HakkimizdaPage() {
         </div>
       </section>
       <LuxuryAbout />
-      {/* Gallery Section */}
-      <section className="py-16 lg:py-24 px-4 md:px-6 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-light text-gray-900 mb-8 text-center">
-            <span className="serif-italic text-corporate-700">Fotoğraf</span> Galerisi
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((i) => (
-              <div key={i} className="relative aspect-[4/3] overflow-hidden group">
-                <img 
-                  src={`/images/pexels/gallery-${i}.jpg`} 
-                  alt={`Galeri ${i}`}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-corporate-900/0 group-hover:bg-corporate-900/30 transition-colors duration-300" />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
       <LuxuryFooter />
     </main>
   )

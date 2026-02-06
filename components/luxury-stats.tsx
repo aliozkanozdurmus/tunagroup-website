@@ -95,7 +95,7 @@ function FloatingShapes() {
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {/* Large circle */}
       <motion.div
-        className="absolute w-64 h-64 border border-white/5 rounded-full"
+        className="absolute w-64 h-64 border border-corporate-200/20 rounded-full"
         style={{ top: "10%", left: "-5%" }}
         animate={{
           y: [0, -20, 0],
@@ -125,7 +125,7 @@ function FloatingShapes() {
       {[...Array(5)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-2 h-2 bg-white/10 rounded-full"
+          className="absolute w-2 h-2 bg-corporate-300/20 rounded-full"
           style={{
             top: `${20 + i * 15}%`,
             left: `${10 + i * 20}%`,
@@ -144,7 +144,7 @@ function FloatingShapes() {
       ))}
       {/* Gradient line */}
       <motion.div
-        className="absolute h-px w-48 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+        className="absolute h-px w-48 bg-gradient-to-r from-transparent via-corporate-400/30 to-transparent"
         style={{ top: "30%", right: "20%" }}
         animate={{
           x: [0, 50, 0],
@@ -165,7 +165,7 @@ export default function LuxuryStats() {
     <section id="rakamlarla" className="relative py-16 lg:py-20 overflow-hidden">
       {/* Background Gradient */}
       <div className="absolute inset-0 bg-gradient-stats" />
-      
+
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-0 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
@@ -185,7 +185,7 @@ export default function LuxuryStats() {
           transition={{ duration: 0.6 }}
         >
           <motion.h2
-            className="text-2xl md:text-3xl lg:text-4xl font-bold text-white tracking-tight"
+            className="text-2xl md:text-3xl lg:text-4xl font-bold text-corporate-950 tracking-tight"
             initial={{ opacity: 0, letterSpacing: "0.2em" }}
             whileInView={{ opacity: 1, letterSpacing: "0.05em" }}
             viewport={{ once: true }}
@@ -194,7 +194,7 @@ export default function LuxuryStats() {
             RAKAMLARLA TUNA GROUP
           </motion.h2>
           <motion.div
-            className="mt-3 h-1 bg-corporate-400 mx-auto"
+            className="mt-3 h-1 bg-corporate-600 mx-auto"
             initial={{ width: 0 }}
             whileInView={{ width: 64 }}
             viewport={{ once: true }}
@@ -214,11 +214,11 @@ export default function LuxuryStats() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <div className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-1">
+              <div className="text-5xl md:text-6xl lg:text-7xl font-bold text-corporate-900 mb-1">
                 <AnimatedCounter value={stats[0].value} suffix={stats[0].suffix} delay={100} />
               </div>
               <motion.div
-                className="text-xs md:text-sm text-white/70 uppercase tracking-widest"
+                className="text-xs md:text-sm text-gray-500 uppercase tracking-widest"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -271,11 +271,11 @@ export default function LuxuryStats() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <div className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-1">
+              <div className="text-5xl md:text-6xl lg:text-7xl font-bold text-corporate-900 mb-1">
                 <AnimatedCounter value={stats[1].value} suffix={stats[1].suffix} delay={300} />
               </div>
               <motion.div
-                className="text-xs md:text-sm text-white/70 uppercase tracking-widest"
+                className="text-xs md:text-sm text-gray-500 uppercase tracking-widest"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -296,11 +296,11 @@ export default function LuxuryStats() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.5 }}
             >
-              <div className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-1">
+              <div className="text-5xl md:text-6xl lg:text-7xl font-bold text-corporate-900 mb-1">
                 <AnimatedCounter value={stats[2].value} suffix={stats[2].suffix} delay={500} />
               </div>
               <motion.div
-                className="text-xs md:text-sm text-white/70 uppercase tracking-widest"
+                className="text-xs md:text-sm text-gray-500 uppercase tracking-widest"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -355,11 +355,11 @@ export default function LuxuryStats() {
             transition={{ duration: 0.6, delay: 0.8 }}
           >
             <div className="text-center lg:text-left">
-              <div className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-1">
+              <div className="text-5xl md:text-6xl lg:text-7xl font-bold text-corporate-900 mb-1">
                 <AnimatedCounter value={stats[3].value} suffix={stats[3].suffix} delay={700} />
               </div>
               <motion.div
-                className="text-xs md:text-sm text-white/70 uppercase tracking-widest"
+                className="text-xs md:text-sm text-gray-500 uppercase tracking-widest"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}

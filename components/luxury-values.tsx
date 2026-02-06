@@ -49,7 +49,7 @@ function ValuesFloatingElements() {
           ease: "linear"
         }}
       />
-      
+
       {/* Diamond shape - right */}
       <motion.div
         className="absolute w-12 h-12 border border-corporate-100 rotate-45"
@@ -64,7 +64,7 @@ function ValuesFloatingElements() {
           ease: "easeInOut"
         }}
       />
-      
+
       {/* Gradient line - bottom */}
       <motion.div
         className="absolute h-px w-48 bg-gradient-to-r from-transparent via-corporate-200 to-transparent"
@@ -79,7 +79,7 @@ function ValuesFloatingElements() {
           ease: "easeInOut"
         }}
       />
-      
+
       {/* Plus sign pattern */}
       <motion.div
         className="absolute text-corporate-100 text-4xl font-light"
@@ -96,7 +96,7 @@ function ValuesFloatingElements() {
       >
         +
       </motion.div>
-      
+
       {/* Dots cluster */}
       <div className="absolute bottom-1/4 left-1/4 flex gap-3">
         {[...Array(3)].map((_, i) => (
@@ -126,14 +126,14 @@ export default function LuxuryValues() {
     target: sectionRef,
     offset: ["start end", "end start"]
   })
-  
+
   const cardsY = useTransform(scrollYProgress, [0, 1], [30, -30])
 
   return (
     <section ref={sectionRef} id="degerlerimiz" className="relative py-12 lg:py-16 px-4 lg:px-6 bg-white overflow-hidden">
       {/* Floating decorative elements */}
       <ValuesFloatingElements />
-      
+
       <div className="relative z-10 max-w-5xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -176,17 +176,13 @@ export default function LuxuryValues() {
                 whileHover={{ y: -8, boxShadow: "0 20px 40px -15px rgba(0, 0, 0, 0.15)" }}
               >
                 {/* Background Hover Effect - Enhanced */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-corporate-800 to-corporate-950"
-                  initial={{ scaleY: 0 }}
-                  whileHover={{ scaleY: 1 }}
-                  transition={{ duration: 0.4 }}
-                  style={{ originY: 1 }}
+                <div
+                  className="absolute inset-0 bg-gradient-to-br from-corporate-800 to-corporate-950 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 />
-                
+
                 {/* Shine effect on hover */}
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                
+
                 {/* Content */}
                 <div className="relative z-10">
                   {/* Icon Container - Enhanced */}
@@ -204,7 +200,7 @@ export default function LuxuryValues() {
                   </h3>
 
                   {/* Subtitle */}
-                  <p className="text-xs text-corporate-600 uppercase tracking-wider mb-3 group-hover:text-corporate-300 transition-colors duration-500">
+                  <p className="text-xs text-corporate-700 uppercase tracking-wider mb-3 group-hover:text-corporate-300 transition-colors duration-500">
                     {value.subtitle}
                   </p>
 
@@ -225,9 +221,9 @@ export default function LuxuryValues() {
                 {/* Corner Decorations - Enhanced */}
                 <div className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-transparent group-hover:border-white/20 transition-colors duration-500" />
                 <div className="absolute top-3 left-3 w-3 h-3 border-t border-l border-transparent group-hover:border-white/10 transition-colors duration-500" />
-                
+
                 {/* Number indicator */}
-                <div className="absolute top-3 right-3 text-xs font-mono text-gray-200 group-hover:text-white/30 transition-colors duration-500">
+                <div className="absolute top-3 right-3 text-xs font-mono text-gray-400 group-hover:text-white/30 transition-colors duration-500">
                   0{i + 1}
                 </div>
               </motion.div>

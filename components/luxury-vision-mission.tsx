@@ -53,10 +53,7 @@ export default function LuxuryVisionMission() {
 
             {/* Content */}
             <p className="text-gray-600 leading-relaxed text-sm lg:text-base">
-              Sağlık teknolojileri ve endüstriyel üretim alanlarında, yenilikçi yaklaşımı
-              ve sürdürülebilir üretim gücüyle küresel ölçekte güven veren ve tercih edilen
-              bir grup şirketi olmak; teknolojiyi, kaliteyi ve insan odaklı yönetimi bir
-              araya getirerek sektörlere yön veren çözümler geliştirmek.
+              Sağlık teknolojileri ve endüstriyel üretim alanlarında, yenilikçi yaklaşımı ve sürdürülebilir üretim gücüyle bölgesel liderliği aşarak küresel ölçekte güven veren ve tercih edilen bir grup şirketi olmak; teknolojiyi, kaliteyi ve insan odaklı yönetimi bir araya getirerek sektörlere yön veren çözümler geliştirmek.
             </p>
 
             {/* Decorative Corner */}
@@ -88,10 +85,7 @@ export default function LuxuryVisionMission() {
 
             {/* Content */}
             <p className="text-gray-600 leading-relaxed text-sm lg:text-base">
-              Sağlık teknolojileri ve endüstriyel üretim alanlarında, uluslararası kalite
-              standartlarına uygun, güvenilir ve yenilikçi çözümler sunmak; sürdürülebilir
-              üretim gücümüz, yetkin insan kaynağımız ve teknoloji odaklı yaklaşımımızla
-              müşterilerimize sürekli değer yaratmak.
+              Sağlık teknolojileri ve endüstriyel üretim alanlarında, uluslararası kalite standartlarına uygun, güvenilir ve yenilikçi çözümler sunmak; sürdürülebilir üretim gücümüz, yetkin insan kaynağımız ve teknoloji odaklı yaklaşımımızla müşterilerimize sürekli değer yaratmak.
             </p>
 
             {/* Decorative Corner */}
