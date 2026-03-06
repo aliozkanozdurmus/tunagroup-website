@@ -1,0 +1,58 @@
+[
+  {
+    "filename": "hero-medical.jpg",
+    "photographer": "Chokniti Khongchum",
+    "photographerUrl": "https://www.pexels.com/@chokniti-khongchum-1197604",
+    "pexelsUrl": "https://www.pexels.com/photo/scientist-using-microscope-3938022/",
+    "query": "medical technology laboratory"
+  },
+  {
+    "filename": "hero-industrial.jpg",
+    "photographer": "Safi Erneste",
+    "photographerUrl": "https://www.pexels.com/@safi-erneste-165511538",
+    "pexelsUrl": "https://www.pexels.com/photo/industrial-workers-operating-machinery-indoors-35082129/",
+    "query": "industrial manufacturing factory"
+  },
+  {
+    "filename": "about-medical.jpg",
+    "photographer": "Tima Miroshnichenko",
+    "photographerUrl": "https://www.pexels.com/@tima-miroshnichenko",
+    "pexelsUrl": "https://www.pexels.com/photo/person-holding-black-tablet-computer-8376285/",
+    "query": "medical surgery hospital"
+  },
+  {
+    "filename": "about-corporate.jpg",
+    "photographer": "Kevin Barillas",
+    "photographerUrl": "https://www.pexels.com/@kevin-barillas-2157892848",
+    "pexelsUrl": "https://www.pexels.com/photo/formal-business-meeting-in-elegant-room-setting-35029604/",
+    "query": "corporate business team"
+  },
+  {
+    "filename": "stats-1.jpg",
+    "photographer": "Chokniti Khongchum",
+    "photographerUrl": "https://www.pexels.com/@chokniti-khongchum-1197604",
+    "pexelsUrl": "https://www.pexels.com/photo/scientist-using-microscope-3938022/",
+    "query": "medical laboratory research"
+  },
+  {
+    "filename": "stats-2.jpg",
+    "photographer": "Anna Shvets",
+    "photographerUrl": "https://www.pexels.com/@shvetsa",
+    "pexelsUrl": "https://www.pexels.com/photo/doctor-working-during-a-surgery-4769133/",
+    "query": "surgical operation hospital"
+  },
+  {
+    "filename": "stats-3.jpg",
+    "photographer": "Los Muertos Crew",
+    "photographerUrl": "https://www.pexels.com/@cristian-rojas",
+    "pexelsUrl": "https://www.pexels.com/photo/medical-practitioners-in-office-8460371/",
+    "query": "medical team doctors"
+  },
+  {
+    "filename": "stats-4.jpg",
+    "photographer": "cottonbro studio",
+    "photographerUrl": "https://www.pexels.com/@cottonbro",
+    "pexelsUrl": "https://www.pexels.com/photo/production-of-beer-labels-5532718/",
+    "query": "industrial production line"
+  }
+]
